@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM nvidia/cuda:12.5.1-base-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -8,9 +8,7 @@ RUN apt update && apt install -y --no-install-recommends curl gnupg ca-certifica
     mkdir -p /usr/share/keyrings /etc/apt/keyrings && \
     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
     chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list && \
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" > /etc/apt/sources.list.d/docker.list
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
 
 # Tous les paquets en un seul apt update
 RUN apt update && apt install -y \
@@ -40,7 +38,6 @@ RUN apt update && apt install -y \
     iptables \
     resolvconf \
     gh \
-    docker-ce-cli docker-compose-plugin \
     && rm -rf /var/lib/apt/lists/*
 
 # Créer l'utilisateur dev — mot de passe désactivé (auth SSH par clé uniquement)

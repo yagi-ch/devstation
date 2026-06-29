@@ -11,7 +11,7 @@ A self-contained Ubuntu 24.04 development environment accessible over SSH. Desig
 | Git | git, GitHub CLI (`gh`) |
 | Node.js | nvm, Node 20 & 22 (default), pnpm, yarn, Claude Code |
 | Python | python3, pyenv, uv, pipx, poetry, ruff |
-| Docker | docker CLI + compose plugin (talks to the host socket) |
+| GPU | CUDA 12.5 runtime (optional — works without GPU too) |
 | Network | WireGuard, iptables, net-tools, ping, dig, traceroute, lsof |
 
 SSH is the only entry point. Password authentication is disabled — key only.
@@ -29,50 +29,41 @@ docker pull <your-dockerhub-username>/dev-tools-container:latest
 Or build locally:
 
 ```bash
-docker build -t dev-tools .
+docker build -t dev-tools-container .
 ```
 
 ## Run
 
-### With Docker Compose (recommended)
-
-Copy `.env.example` to `.env` and adjust the values:
+Copy `.env.example` to `.env` and adjust the paths:
 
 ```bash
 cp .env.example .env
+```
+
+**Without GPU:**
+
+```bash
 docker compose up -d
 ```
 
-| Variable | Default | Description |
-|---|---|---|
-| `SSH_PORT` | `2222` | Host port forwarded to SSH inside the container |
-| `AUTHORIZED_KEYS` | `~/.ssh/authorized_keys` | Path to your public key file on the host |
-| `PROJECTS_DIR` | `~/projects` | Host directory mounted at `/home/dev/projects` |
-| `DOCKER_IMAGE` | _(build locally)_ | Set to `<username>/dev-tools-container:latest` to pull from Docker Hub instead of building |
-
-### With Docker CLI
+**With NVIDIA GPU:**
 
 ```bash
-docker run -d \
-  --name dev \
-  -p 2222:22 \
-  -v ~/.ssh/authorized_keys:/home/dev/.ssh/authorized_keys:ro \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  --cap-add NET_ADMIN \
-  --cap-add SYS_MODULE \
-  --sysctl net.ipv4.conf.all.src_valid_mark=1 \
-  dev-tools
+docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d
 ```
 
-| Flag | Why |
-|---|---|
-| `-p 2222:22` | Expose SSH on host port 2222 (change as needed) |
-| `authorized_keys` volume | Inject your public key without baking it into the image |
-| `docker.sock` volume | Let the container's Docker CLI talk to the host daemon |
-| `NET_ADMIN` + `SYS_MODULE` | Required for WireGuard to create/manage network interfaces |
-| `src_valid_mark` sysctl | Required for WireGuard routing rules to work correctly |
+`docker-compose.gpu.yml` adds `runtime: nvidia`, `shm_size: 8gb`, and the GPU device reservation. It requires [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html) on the host.
 
-> **Note:** WireGuard runs in the container but relies on the kernel module of the host. Any kernel >= 5.6 has it built in, so no extra setup is needed on modern hosts.
+### Variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `SSH_PORT` | `2222` | Host port mapped to SSH |
+| `HOME_DIR` | `./data/home` | Host path mounted as `/home` inside the container |
+| `WIREGUARD_DIR` | `./data/wireguard` | Host path mounted as `/etc/wireguard` |
+| `DOCKER_IMAGE` | _(build locally)_ | Set to `<username>/dev-tools-container:latest` to pull from Docker Hub |
+
+> **First run:** make sure `$HOME_DIR/dev/.ssh/authorized_keys` exists with your public key before starting the container.
 
 ## Connect
 
@@ -92,23 +83,12 @@ Host devbox
 
 Then just `ssh devbox`.
 
-## Persist your work
-
-The container is stateless by default. Mount a volume to keep your projects across restarts:
-
-```bash
-docker run -d \
-  ...
-  -v ~/projects:/home/dev/projects \
-  dev-tools
-```
-
 ## WireGuard
 
-Place your config in `/home/dev/wg0.conf` (or mount it as a volume), then:
+Drop your config files in `$WIREGUARD_DIR` on the host (they appear at `/etc/wireguard/` inside the container), then:
 
 ```bash
-sudo wg-quick up /home/dev/wg0.conf
+sudo wg-quick up wg0
 ```
 
-The container has all required dependencies (`wireguard-tools`, `iptables`, `resolvconf`).
+Required dependencies (`wireguard-tools`, `iptables`, `resolvconf`) and the `tun` device are already set up.
