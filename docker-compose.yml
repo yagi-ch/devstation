@@ -2,8 +2,8 @@ services:
   dev:
     image: ${DOCKER_IMAGE:-dev-tools-container}
     build: .
-    container_name: ubuntu-dev
-    hostname: ubuntu-dev
+    container_name: devstation
+    hostname: devstation
     restart: unless-stopped
     ports:
       - "${SSH_PORT:-2222}:22"

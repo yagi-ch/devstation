@@ -1,6 +1,6 @@
-# dev-tools-container
+# devstation
 
-A self-contained Ubuntu 24.04 development environment accessible over SSH. Designed for remote work — connect from anywhere, pick up where you left off.
+A self-hosted remote development environment accessible over SSH. Works with VS Code Remote SSH, JetBrains Gateway, or any SSH-capable editor. Connect from anywhere, pick up where you left off.
 
 ## What's included
 

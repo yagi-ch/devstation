@@ -38,7 +38,7 @@ Hook configuré dans `.claude/settings.json` — sync `atlas.json` à chaque fin
 
 ```bash
 source .env
-curl -s "$ATLAS_URL/api/projects/dev-tools-container" \
+curl -s "$ATLAS_URL/api/projects/devstation" \
   -H "Authorization: Bearer $ATLAS_TOKEN" | python3 -c "import json,sys; p=json.load(sys.stdin); print(p['name'], '—', p['status'])"
 ```
 
@@ -50,7 +50,7 @@ curl -s "$ATLAS_URL/api/projects/dev-tools-container" \
 
 ```bash
 source .env
-curl -s -X PUT "$ATLAS_URL/api/projects/dev-tools-container" \
+curl -s -X PUT "$ATLAS_URL/api/projects/devstation" \
   -H "Authorization: Bearer $ATLAS_TOKEN" -H "Content-Type: application/json" -d @atlas.json
 ```
 
@@ -59,12 +59,12 @@ curl -s -X PUT "$ATLAS_URL/api/projects/dev-tools-container" \
 ```bash
 source .env
 # Statut courant
-curl -s -X PATCH "$ATLAS_URL/api/projects/dev-tools-container" \
+curl -s -X PATCH "$ATLAS_URL/api/projects/devstation" \
   -H "Authorization: Bearer $ATLAS_TOKEN" -H "Content-Type: application/json" \
   -d '{"currentStatus": "…"}'
 
 # Journal (kind : feat | fix | deploy | release | note | chore)
-curl -s -X POST "$ATLAS_URL/api/projects/dev-tools-container/log" \
+curl -s -X POST "$ATLAS_URL/api/projects/devstation/log" \
   -H "Authorization: Bearer $ATLAS_TOKEN" -H "Content-Type: application/json" \
   -d '{"kind": "feat", "title": "…"}'
 ```
@@ -74,12 +74,12 @@ curl -s -X POST "$ATLAS_URL/api/projects/dev-tools-container/log" \
 ```bash
 source .env
 # Lire
-curl -s "$ATLAS_URL/api/projects/dev-tools-container" \
+curl -s "$ATLAS_URL/api/projects/devstation" \
   -H "Authorization: Bearer $ATLAS_TOKEN" | python3 -c \
   "import json,sys; p=json.load(sys.stdin); [print(f['status'].upper(), f['title'], f['id']) for f in p.get('features',[])]"
 
 # Créer (status : idea | planned | active | paused | done)
-curl -s -X POST "$ATLAS_URL/api/projects/dev-tools-container/features" \
+curl -s -X POST "$ATLAS_URL/api/projects/devstation/features" \
   -H "Authorization: Bearer $ATLAS_TOKEN" -H "Content-Type: application/json" \
   -d '{"title": "…", "description": "…", "status": "active"}'
 

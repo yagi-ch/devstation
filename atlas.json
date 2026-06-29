@@ -1,8 +1,8 @@
 {
-  "slug": "dev-tools-container",
-  "name": "Dev Tools Container",
+  "slug": "devstation",
+  "name": "Devstation",
   "status": "deployed",
-  "description": "Ubuntu 24.04 dev environment accessible via SSH — Node.js, Python, Docker CLI, WireGuard, Claude Code.",
+  "description": "Self-hosted remote dev environment accessible via SSH — compatible VS Code Remote, JetBrains Gateway. CUDA, Node.js, Python, WireGuard.",
   "tags": ["docker", "ssh", "dev-env", "wireguard", "perso"],
   "boxArt": {
     "creator": "yagi-ch",
@@ -12,8 +12,8 @@
   },
   "repositories": [
     {
-      "fullName": "yagi-ch/dev-tools-container",
-      "url": "https://github.com/yagi-ch/dev-tools-container",
+      "fullName": "yagi-ch/devstation",
+      "url": "https://github.com/yagi-ch/devstation",
       "account": "perso"
     }
   ],
