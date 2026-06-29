@@ -1,6 +1,6 @@
 services:
   dev:
-    image: ${DOCKER_IMAGE:-dev-tools-container}
+    image: ${DOCKER_IMAGE:-yagich/dev-tools-container:latest}
     build: .
     container_name: devstation
     hostname: devstation
