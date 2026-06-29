@@ -24,6 +24,23 @@ docker build -t dev-tools .
 
 ## Run
 
+### With Docker Compose (recommended)
+
+Copy `.env.example` to `.env` and adjust the values:
+
+```bash
+cp .env.example .env
+docker compose up -d
+```
+
+| Variable | Default | Description |
+|---|---|---|
+| `SSH_PORT` | `2222` | Host port forwarded to SSH inside the container |
+| `AUTHORIZED_KEYS` | `~/.ssh/authorized_keys` | Path to your public key file on the host |
+| `PROJECTS_DIR` | `~/projects` | Host directory mounted at `/home/dev/projects` |
+
+### With Docker CLI
+
 ```bash
 docker run -d \
   --name dev \
