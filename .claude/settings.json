@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "source .env 2>/dev/null; SLUG=$(python3 -c \"import json; print(json.load(open('atlas.json'))['slug'])\" 2>/dev/null) && curl -sf -X PUT \"$ATLAS_URL/api/projects/$SLUG\" -H \"Authorization: Bearer $ATLAS_TOKEN\" -H 'Content-Type: application/json' -d @atlas.json > /dev/null && echo '[Atlas] sync ok' || true"
+          }
+        ]
+      }
+    ]
+  }
+}

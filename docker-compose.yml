@@ -1,0 +1,16 @@
+services:
+  dev:
+    build: .
+    container_name: dev
+    restart: unless-stopped
+    ports:
+      - "${SSH_PORT:-2222}:22"
+    volumes:
+      - ${AUTHORIZED_KEYS:-~/.ssh/authorized_keys}:/home/dev/.ssh/authorized_keys:ro
+      - ${PROJECTS_DIR:-~/projects}:/home/dev/projects
+      - /var/run/docker.sock:/var/run/docker.sock
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1

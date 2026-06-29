@@ -1,0 +1,30 @@
+{
+  "slug": "dev-tools-container",
+  "name": "Dev Tools Container",
+  "status": "deployed",
+  "description": "Ubuntu 24.04 dev environment accessible via SSH — Node.js, Python, Docker CLI, WireGuard, Claude Code.",
+  "tags": ["docker", "ssh", "dev-env", "wireguard", "perso"],
+  "boxArt": {
+    "creator": "yagi-ch",
+    "accentColor": "#00ff9d",
+    "slogan": "Your dev environment, anywhere.",
+    "artStyle": "cyber-retro"
+  },
+  "repositories": [
+    {
+      "fullName": "yagi-ch/dev-tools-container",
+      "url": "https://github.com/yagi-ch/dev-tools-container",
+      "account": "perso"
+    }
+  ],
+  "environments": [],
+  "services": [
+    { "host": "tower", "containerName": "dev" }
+  ],
+  "monitors": [
+    { "label": "Serveur Unraid", "systemId": "Unraid", "account": "Unraid" }
+  ],
+  "links": [
+    { "label": "Portainer", "url": "http://tower:9000" }
+  ]
+}
