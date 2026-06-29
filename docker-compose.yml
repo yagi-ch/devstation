@@ -1,5 +1,6 @@
 services:
   dev:
+    image: ${DOCKER_IMAGE:-dev-tools-container}
     build: .
     container_name: dev
     restart: unless-stopped

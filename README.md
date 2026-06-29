@@ -18,6 +18,16 @@ SSH is the only entry point. Password authentication is disabled — key only.
 
 ## Build
 
+The image is automatically built and pushed to Docker Hub on every push to `main` via GitHub Actions.
+
+Pull the latest image:
+
+```bash
+docker pull <your-dockerhub-username>/dev-tools-container:latest
+```
+
+Or build locally:
+
 ```bash
 docker build -t dev-tools .
 ```
@@ -38,6 +48,7 @@ docker compose up -d
 | `SSH_PORT` | `2222` | Host port forwarded to SSH inside the container |
 | `AUTHORIZED_KEYS` | `~/.ssh/authorized_keys` | Path to your public key file on the host |
 | `PROJECTS_DIR` | `~/projects` | Host directory mounted at `/home/dev/projects` |
+| `DOCKER_IMAGE` | _(build locally)_ | Set to `<username>/dev-tools-container:latest` to pull from Docker Hub instead of building |
 
 ### With Docker CLI
 
