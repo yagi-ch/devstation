@@ -45,12 +45,15 @@ HOME_DIR="$BASE_DIR/$CONTAINER/home"
 WG_DIR="$BASE_DIR/$CONTAINER/wireguard"
 SSH_DIR="$HOME_DIR/dev/.ssh"
 
+DEV_UID=1000
+
 echo ""
 echo "  → Creating directories..."
 sudo mkdir -p "$SSH_DIR" "$WG_DIR"
 sudo chmod 700 "$SSH_DIR"
 echo "$PUBKEY" | sudo tee "$SSH_DIR/authorized_keys" > /dev/null
 sudo chmod 600 "$SSH_DIR/authorized_keys"
+sudo chown -R "$DEV_UID:$DEV_UID" "$HOME_DIR/dev"
 echo "  ✓ $SSH_DIR"
 
 HOST_IP=$(hostname -I | awk '{print $1}')
