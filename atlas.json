@@ -18,13 +18,7 @@
     }
   ],
   "environments": [],
-  "services": [
-    { "host": "tower", "containerName": "dev" }
-  ],
-  "monitors": [
-    { "label": "Serveur Unraid", "systemId": "Unraid", "account": "Unraid" }
-  ],
-  "links": [
-    { "label": "Portainer", "url": "http://tower:9000" }
-  ]
+  "services": [],
+  "monitors": [],
+  "links": []
 }
