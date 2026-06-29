@@ -23,7 +23,7 @@ The image is automatically built and pushed to Docker Hub on every push to `main
 Pull the latest image:
 
 ```bash
-docker pull yagich/dev-tools-container:latest
+docker pull yagich/devstation:latest
 ```
 
 Or build locally:
@@ -61,7 +61,7 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d
 | `SSH_PORT` | `2222` | Host port mapped to SSH |
 | `HOME_DIR` | `./data/home` | Host path mounted as `/home` inside the container |
 | `WIREGUARD_DIR` | `./data/wireguard` | Host path mounted as `/etc/wireguard` |
-| `DOCKER_IMAGE` | `yagich/dev-tools-container:latest` | Override to use a custom image |
+| `DOCKER_IMAGE` | `yagich/devstation:latest` | Override to use a custom image |
 
 > **First run:** make sure `$HOME_DIR/dev/.ssh/authorized_keys` exists with your public key before starting the container.
 
