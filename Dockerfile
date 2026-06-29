@@ -92,5 +92,12 @@ RUN echo 'alias ll="ls -lah"' >> ~/.bashrc && \
     echo 'alias fd="fdfind"' >> ~/.bashrc
 
 USER root
+
+# Snapshot du home buildé — utilisé par l'entrypoint au premier démarrage
+RUN cp -r /home/dev /opt/dev-home
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 22
-CMD ["/usr/sbin/sshd", "-D"]
+CMD ["/entrypoint.sh"]
