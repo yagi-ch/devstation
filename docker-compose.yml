@@ -10,7 +10,7 @@ services:
     volumes:
       - ${HOME_DIR:-./data/home}:/home
       - ${WIREGUARD_DIR:-./data/wireguard}:/etc/wireguard
-      - /tmp/tmux-1001:/tmp/tmux-1001
+      - ${TMUX_SOCKET_DIR:-/tmp/tmux-1001}:/tmp/tmux-1001
     cap_add:
       - NET_ADMIN
     sysctls:
