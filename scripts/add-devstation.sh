@@ -46,13 +46,23 @@ WG_DIR="$BASE_DIR/$CONTAINER/wireguard"
 SSH_DIR="$HOME_DIR/dev/.ssh"
 
 DEV_UID=1000
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo ""
 echo "  → Creating directories..."
-sudo mkdir -p "$SSH_DIR" "$WG_DIR"
+sudo mkdir -p "$SSH_DIR" "$WG_DIR" "$HOME_DIR/dev/scripts"
 sudo chmod 700 "$SSH_DIR"
 echo "$PUBKEY" | sudo tee "$SSH_DIR/authorized_keys" > /dev/null
 sudo chmod 600 "$SSH_DIR/authorized_keys"
+
+echo "  → Copying scripts..."
+for script in "$SCRIPTS_DIR"/*.sh; do
+  [[ "$(basename "$script")" == "add-devstation.sh" ]] && continue
+  sudo cp "$script" "$HOME_DIR/dev/scripts/"
+  sudo chmod +x "$HOME_DIR/dev/scripts/$(basename "$script")"
+  echo "    ✓ $(basename "$script")"
+done
+
 sudo chown -R "$DEV_UID:$DEV_UID" "$HOME_DIR"
 echo "  ✓ $SSH_DIR"
 
@@ -68,5 +78,6 @@ printf "║  %-20s  %-35s║\n" "HOME_DIR" "$HOME_DIR"
 printf "║  %-20s  %-35s║\n" "WIREGUARD_DIR" "$WG_DIR"
 echo "╠══════════════════════════════════════════════════════════╣"
 echo "║  Connect:  ssh -p $PORT dev@$HOST_IP"
+echo "║  First run: ~/scripts/init-git.sh"
 echo "╚══════════════════════════════════════════════════════════╝"
 echo ""
